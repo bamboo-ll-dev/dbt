@@ -6,4 +6,4 @@ SELECT id AS id2, payment_gateway_names FROM
 LEFT JOIN UNNEST(payment_gateway_names) AS payment_gateway_names 
 GROUP BY updated_at, id, payment_gateway_names) AS A
 GROUP BY updated_at, id) AS A
-) AS A WHERE rn=1) AS B
+) AS A WHERE rn=1)
