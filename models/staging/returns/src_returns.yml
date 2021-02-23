@@ -1,0 +1,12 @@
+version: 2
+
+sources:
+  - name: zenf
+    description: A clone of data in zenfulfillments web application related to DE-Account
+    database: leslunes-raw
+    schema: zenfulfillment
+    tables:
+      - name: returns_de
+      - name: returns_it
+      - name: returns_fr
+      - name: returns_xentral

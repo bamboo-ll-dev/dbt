@@ -6,10 +6,6 @@ sources:
     database: leslunes-raw
     schema: zenfulfillment
     tables:
-      - name: returns_de
-      - name: returns_it
-      - name: returns_fr
-      - name: returns_xentral
       - name: orders_de
       - name: orders_it
       - name: orders_fr
