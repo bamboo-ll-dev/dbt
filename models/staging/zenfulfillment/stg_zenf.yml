@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: stg_shipments
+    columns: 
+      - name: product_sku
+        tests:
+          - unique
+          - not_null
+
