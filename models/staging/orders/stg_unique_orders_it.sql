@@ -180,7 +180,7 @@ REPLACE(client_details. user_agent, ',', ';') AS client_details__user_agent,
 f.value.updated_at as filfillment_updated_at,	f.value.status
 
 FROM
-leslunes-raw.shopify_it.orders
+{{source('shopify_it', 'orders')}}
 LEFT JOIN UNNEST(fulfillments) AS  f
 LEFT JOIN UNNEST(discount_applications) AS dc
 LEFT JOIN UNNEST(discount_codes) AS discount_codes
@@ -193,7 +193,7 @@ SELECT id AS id2, payment_gateway_names FROM
 (SELECT row_number() OVER (PARTITION BY id ORDER BY updated_at DESC) AS rn, updated_at, id, payment_gateway_names FROM
 (SELECT updated_at, id, STRING_AGG(payment_gateway_names) AS payment_gateway_names FROM
 (SELECT updated_at, id, payment_gateway_names.value AS payment_gateway_names 
-FROM leslunes-raw.shopify_it.orders
+FROM {{source('shopify_it', 'orders')}}
 LEFT JOIN UNNEST(payment_gateway_names) AS payment_gateway_names 
 GROUP BY updated_at, id, payment_gateway_names) AS A
 GROUP BY updated_at, id) AS A
