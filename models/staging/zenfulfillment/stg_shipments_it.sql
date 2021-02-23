@@ -3,7 +3,7 @@ WITH shipments AS (
     *,
     ROW_NUMBER() OVER (PARTITION BY created_at, product_sku, reference ORDER BY shipment_created_at DESC) AS row_number
   FROM
-   {{ source('zenf', 'orders_de')}}
+   {{ source('zenf', 'orders_it')}}
     )
 SELECT
   * EXCEPT(row_number)
