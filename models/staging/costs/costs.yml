@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: facebook_ads_costs
+    description: costs caused by facebook ads
+    database: leslunes-raw
+    schema: facebook_ads
+    tables:
+      - name: ads_insights

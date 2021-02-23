@@ -1,5 +1,3 @@
-{{ config (materialized='view', schema='coupons', alias='influencer_coupons')}}
-
 WITH coupons AS(
 SELECT 
     code
