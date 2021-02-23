@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: influencer_coupons
+    description: coupon codes created in influencer-tool
+    database: leslunes-raw
+    schema: deals
+    tables:
+      - name: coupons

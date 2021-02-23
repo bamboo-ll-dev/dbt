@@ -14,7 +14,7 @@ SELECT
     ,(SELECT MAX(source) from `leslunes-raw.deals.deals_data` where UPPER(coupon_code) = UPPER(code)) AS source
     ,db_entry_created_at
 FROM 
-    `leslunes-raw.deals.coupons`
+    {{ source('influencer_coupons', 'coupons')}}
 )
 
 SELECT 
