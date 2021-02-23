@@ -1,0 +1,6 @@
+version: 2
+
+sources:
+  - name: stg_payments
+    description: Payments and refunds proceed by shopify
+    database: leslunes-raw
