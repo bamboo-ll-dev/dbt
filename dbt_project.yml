@@ -38,8 +38,20 @@ clean-targets:         # directories to be removed by `dbt clean`
 # using the `{{ config(...) }}` macro.
 models:
   leslunes_analytics:
-      # Applies to all files under models/example/
-      coupons:
-          materialized: view
-      posts:
-          materialized: view
+      staging:
+        coupons:
+            schema: 'coupons'
+        costs:
+            schema: 'costs'
+        influencer:
+            schema: 'influencer'
+        posts:
+            schema: 'posts'
+        payments:
+            schema: 'payments'
+        returns:
+            schema: 'returns'
+        shipments:
+            schema: 'shipments'
+
+
