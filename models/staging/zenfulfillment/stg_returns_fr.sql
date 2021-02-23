@@ -1,7 +1,7 @@
 WITH shipments AS (
   SELECT
     *,
-    ROW_NUMBER() OVER (PARTITION BY processed_at, products_sku, reference ORDER BY shipment_created_at DESC) AS row_number
+    ROW_NUMBER() OVER (PARTITION BY processed_at, products_sku, reference ORDER BY updated_at DESC) AS row_number
   FROM
    {{ source('zenf', 'returns_fr')}}
     )
