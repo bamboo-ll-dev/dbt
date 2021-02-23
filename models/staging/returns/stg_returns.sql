@@ -28,4 +28,4 @@ FROM {{ref('stg_returns_it')}}
 SELECT 
  *
 FROM CTE
-WHERE product_sku IS NOT NULL 
+WHERE products_sku IS NOT NULL 
