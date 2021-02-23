@@ -1,8 +1,8 @@
 SELECT order_id, amount, created_at, 'DE' AS source 
-FROM `leslunes-prep.refunds.refunds_amount_per_order_de` 
+FROM {{ ref('stg_refunds_amount_per_order_de') }}
 UNION ALL
 SELECT order_id, amount, created_at, 'FR' AS source  
-FROM `leslunes-prep.refunds.refunds_amount_per_order_fr`
+FROM {{ ref('stg_refunds_amount_per_order_fr') }}
 UNION ALL
 SELECT order_id, amount, created_at, 'IT' AS source  
-FROM `leslunes-prep.refunds.refunds_amount_per_order_it`
+FROM {{ ref('stg_refunds_amount_per_order_it') }}
