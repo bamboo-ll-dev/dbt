@@ -1,0 +1,14 @@
+version: 2
+sources:
+  - name: shopify_de
+    database: leslunes-raw
+    tables:
+      - name: orders
+  - name: shopify_fr
+    database: leslunes-raw
+    tables:
+      - name: orders
+  - name: shopify_it
+    database: leslunes-raw
+    tables:
+      - name: orders
