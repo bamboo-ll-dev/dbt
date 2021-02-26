@@ -39,8 +39,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   leslunes_analytics:
       staging:
-        abandoned_checkouts:
-          schema: 'abandoned_checkouts'
+        abondoned_checkouts:
+          schema: 'abondoned_checkouts'
         bq_costs:
           schema: 'bq_costs'
         coupons:
