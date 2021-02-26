@@ -7,7 +7,7 @@ FROM (
     created_at,
     ROW_NUMBER() OVER (PARTITION BY id ORDER BY _sdc_batched_at DESC) AS rn
   FROM
-    `leslunes-raw.shopify_it.transactions` 
+     {{ source('refunds_it', 'transactions') }}
   WHERE
     kind='refund'
     AND status='success') AS refunds
