@@ -1,4 +1,14 @@
 version: 2
 
+models:
+  - name: stg_returns_de
+    description: processed returns by Zenfulfillment before Xentral-rollout
 
- 
+  - name: stg_returns_fr
+    description: processed returns by  Zenfulfillment before Xentral-rollout 
+
+  - name: stg_returns_it
+    description: processed returns by Zenfulfillment before Xentral-rollout 
+
+  - name: stg_returns_xentral
+    description: processed returns by Zenfulfillment since Xentral-rollout 

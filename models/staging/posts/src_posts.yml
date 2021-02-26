@@ -1,9 +1,10 @@
 version: 2
 
 sources:
-  - name: facebook_ads_costs
-    description: costs caused by facebook ads
+  - name: posts
+    description: influencer posts in im.tool
     database: leslunes-raw
-    schema: facebook_ads
+    schema: unlooped
     tables:
-      - name: ads_insights
+      - name: marketing_post
+

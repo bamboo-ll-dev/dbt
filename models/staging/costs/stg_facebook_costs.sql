@@ -21,7 +21,7 @@ WITH cte AS(
     date_start,
     ROW_NUMBER() OVER(PARTITION BY date_start, campaign_name, ad_name) AS row_number
   FROM
-    `leslunes-raw.facebook_ads.ads_insights`
+    {{ source('facebook_ads_costs','ads_insights') }}
   GROUP BY
   1,3,18,19
  )
