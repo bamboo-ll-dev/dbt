@@ -1,1 +1,5 @@
 version: 2
+
+models:
+  - name: stg_facebook_costs
+    description: performance marketing costs arised in facebook ads

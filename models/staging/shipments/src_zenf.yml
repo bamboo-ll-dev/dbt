@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: zenf
-    description: A clone of data in zenfulfillments web application related to DE-Account
+    description: A clone of data in zenfulfillments web application
     database: leslunes-raw
     schema: zenfulfillment
     tables:

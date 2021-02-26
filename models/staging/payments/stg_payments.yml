@@ -1,6 +1,9 @@
 version: 2
 
-sources:
-  - name: stg_payments
-    description: Payments and refunds proceed by shopify
-    database: leslunes-raw
+models:
+  - name: stg_payment_gateways
+    description: Getting getting all payment gateways (gateway shows only the last payment type and when order is edited, sometimes it shows 'manual'
+
+    columns:
+      - name: payment_gateway
+        description: name of the payment provider of an processed order 
