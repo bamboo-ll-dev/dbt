@@ -39,19 +39,53 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   leslunes_analytics:
       staging:
+        abandoned_checkouts:
+          schema: 'abandoned_checkouts'
+        bq_costs:
+          schema: 'bq_costs'
         coupons:
             schema: 'coupons'
         costs:
             schema: 'costs'
+        customers:
+            schema: 'customers'
+        events:
+          schema: 'events'
+        gsheets:
+          schema: 'gsheets'
         influencer:
             schema: 'influencer'
-        posts:
-            schema: 'posts'
+        items:
+            schema: 'items'
+        marketing:
+          schema: 'marketing'
+        orders:
+          schema: 'orders'
         payments:
             schema: 'payments'
+        posts:
+            schema: 'posts'
+        products:
+          schema: 'products'
+        refunds:
+          schema: 'refunds'
         returns:
             schema: 'returns'
+        sales:
+          schema: 'sales'
+        scm:
+          schema: 'scm'
         shipments:
             schema: 'shipments'
+        surveys:
+          schema: 'surveys'
+        xentral:
+          schema: 'xentral'
+        zendesk:
+          schema: 'zendesk'
+
+
+
+
 
 
