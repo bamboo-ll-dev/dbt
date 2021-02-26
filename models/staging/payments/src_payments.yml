@@ -1,1 +1,23 @@
 version: 2
+
+sources:
+  - name: refunds_fr
+    description: refunds data in shopify shop
+    database: leslunes-raw
+    schema: shopify_fr
+    tables:
+      - name: transactions
+
+  - name: refunds_de
+    description: refunds data in shopify shop
+    database: leslunes-raw
+    schema: shopify_de
+    tables:
+      - name: transactions
+
+  - name: refunds_it
+    description: refunds data in shopify shop
+    database: leslunes-raw
+    schema: shopify_it
+    tables:
+      - name: transactions

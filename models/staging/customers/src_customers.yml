@@ -1,1 +1,10 @@
 version: 2
+
+version: 2
+sources:
+  - name: abondoned_checkouts_de
+    description: abondoned checkouts at shopify shop
+    database: leslunes-raw
+    schema: shopify_fr
+    tables:
+      - name: abandoned_checkouts
