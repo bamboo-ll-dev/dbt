@@ -14,7 +14,7 @@ sources:
     tables:
       - name: abandoned_checkouts
   
-      - name: abondoned_checkouts_it
+  - name: abondoned_checkouts_it
     description: abondoned checkouts at shopify shop
     database: leslunes-raw
     schema: shopify_it
