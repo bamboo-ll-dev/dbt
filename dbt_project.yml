@@ -83,6 +83,9 @@ models:
           schema: 'xentral'
         zendesk:
           schema: 'zendesk'
+      marts:
+        core:
+          schema: 'core'
 
 
 
