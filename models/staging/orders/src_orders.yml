@@ -5,13 +5,16 @@ sources:
     database: leslunes-raw
     tables:
       - name: orders
+      - name: sales_summary
   - name: shopify_fr
     description: order data that comes from the French shopify shop
     database: leslunes-raw
     tables:
       - name: orders
+      - name: sales_summary
   - name: shopify_it
     description: order data that comes from the Italian shopify shop
     database: leslunes-raw
     tables:
       - name: orders
+      - name: sales_summary

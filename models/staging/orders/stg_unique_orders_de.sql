@@ -178,7 +178,7 @@ REPLACE(client_details. user_agent, ',', ';') AS client_details__user_agent,
 f.value.updated_at as filfillment_updated_at,	f.value.status
 
 FROM
-leslunes-raw.shopify_de.orders o
+{{source('shopify_de', 'orders')}} o
 LEFT JOIN UNNEST(fulfillments) AS f
 LEFT JOIN (SELECT 
 checkout_id
@@ -205,3 +205,4 @@ GROUP BY updated_at, id, payment_gateway_names) AS A
 GROUP BY updated_at, id) AS A
 ) AS A WHERE rn=1) AS B
 ON A.id=B.id2
+WHERE note != 'test'

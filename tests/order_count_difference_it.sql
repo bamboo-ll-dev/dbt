@@ -2,7 +2,7 @@ with stitch_orders AS(
 SELECT 
 SAFE_CAST(DATE(created_at) AS STRING) AS ordered_at,
 count(*) as order_count
-FROM `leslunes-prep.dbt_orders.stg_unique_orders_it`
+FROM {{ ref('stg_unique_orders_it')}}
 GROUP BY 1
 ORDER BY 1 DESC)
 
@@ -10,7 +10,8 @@ ORDER BY 1 DESC)
 SELECT 
 day	AS ordered_at
 ,SAFE_CAST(orders AS INT64) AS orders
-FROM `leslunes-raw.shopify_it.sales_summary` order by day desc
+FROM {{source('shopify_it', 'sales_summary')}}
+order by day desc
 ),
 
 date_array AS (
@@ -27,5 +28,5 @@ date_array.ordered_at
 FROM date_array
 LEFT JOIN shopify_csv_orders USING(ordered_at)
 LEFT JOIN stitch_orders USING(ordered_at)
-WHERE ((IFNULL(shopify_csv_orders.orders,0) - IFNULL(stitch_orders.order_count,0))) != 0
+WHERE (IFNULL(shopify_csv_orders.orders,0) - IFNULL(stitch_orders.order_count,0)) != 0
 ORDER BY ordered_at DESC

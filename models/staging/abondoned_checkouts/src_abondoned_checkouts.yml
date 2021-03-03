@@ -3,7 +3,7 @@ sources:
   - name: abondoned_checkouts_de
     description: abondoned checkouts at shopify shop
     database: leslunes-raw
-    schema: shopify_fr
+    schema: shopify_de
     tables:
       - name: abandoned_checkouts
   
