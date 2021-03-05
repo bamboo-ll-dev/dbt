@@ -58,7 +58,7 @@ SAFE_CAST(created_at AS DATE) AS created_at, email, discount_codes, source, tota
 FROM leslunes-prep.orders.orders_combined WHERE source_name='web'
 ) AS A
 LEFT JOIN
-(SELECT code, code_type FROM {{ref('stg_coupons')}} GROUP BY code, code_type) AS B
+(SELECT code, code_type FROM {{ref('coupons')}} GROUP BY code, code_type) AS B
 ON A.discount_codes=B.code
 LEFT JOIN 
 (SELECT order_id, SUM(amount) AS refunds, source AS source3 FROM leslunes-prep.refunds.refunds_amount_per_order_combined GROUP BY order_id, source) AS C

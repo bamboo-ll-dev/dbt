@@ -11,4 +11,4 @@ FROM (
                 FROM {{ source('shopify_it','orders') }}
 LEFT JOIN UNNEST(payment_gateway_names) AS payment_gateway_names 
 GROUP BY updated_at, id, payment_gateway_names) AS A
-GROUP BY updated_at, id) AS A ) AS A  WHERE rn=1)
+GROUP BY updated_at, id) AS A ) AS A  WHERE rn=1

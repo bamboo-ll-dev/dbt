@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: xentral
+    description: data extract from xentral. data comes from custom xentral reports
+    database: leslunes-raw
+    schema: xentral
+    tables:
+      - name: influencer_orders
+      - name: physical_and_virtual_stock

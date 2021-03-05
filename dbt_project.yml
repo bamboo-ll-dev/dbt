@@ -53,6 +53,8 @@ models:
           schema: 'events'
         gsheets:
           schema: 'gsheets'
+        google_analytics:
+          schema: 'google_analytics'
         influencer:
             schema: 'influencer'
         items:
