@@ -1,0 +1,1 @@
+SELECT * FROM `leslunes-raw.zenloop.answers_DE_Survey_2020`

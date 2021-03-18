@@ -8,3 +8,4 @@ WHERE type = 'Comment'
 SELECT * FROM comments
 
 where row_number = 1
+

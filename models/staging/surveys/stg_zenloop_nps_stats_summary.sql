@@ -1,0 +1,1 @@
+SELECT * FROM `leslunes-raw.zenloop.nps_stats`
