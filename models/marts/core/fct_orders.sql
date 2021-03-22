@@ -1,5 +1,5 @@
 SELECT
-   id AS order_id
+   transaction_id AS order_id
   ,number
   ,name AS shop_order_refrence
   ,regexp_extract(name, r"[0-9].*") AS ordernumber
