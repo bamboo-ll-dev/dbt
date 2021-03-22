@@ -43,8 +43,6 @@ models:
           schema: 'abondoned_checkouts'
         bq_costs:
           schema: 'bq_costs'
-        coupons:
-            schema: 'coupons'
         costs:
             schema: 'costs'
         customers:
@@ -75,6 +73,8 @@ models:
             schema: 'returns'
         sales:
           schema: 'sales'
+        sales_channel:
+          schema: 'sales_channel'
         scm:
           schema: 'scm'
         shipments:

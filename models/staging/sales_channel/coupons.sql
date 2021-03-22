@@ -4,8 +4,8 @@ SELECT
     ,value
     ,fixedAmount
     ,type
-    ,startsAt
-    ,endsAt
+    ,PARSE_DATETIME("%Y-%m-%d %H:%M:%S",startsAt) AS startsAt 
+    ,PARSE_DATETIME("%Y-%m-%d %H:%M:%S",endsAt) AS endsAt
     ,influencerfullName
     ,SPLIT(influencerUsernamesAsString, " / ")[SAFE_OFFSET(0)] AS influencerUsernamesAsString
     ,SPLIT(influencerUsernamesAsString, " / ")[SAFE_OFFSET(1)] AS follower
