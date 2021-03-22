@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: stg_unique_orders_de
+  - name: stg_orders_de
     columns:
       - name: test
         tests:
@@ -9,7 +9,7 @@ models:
              quote:  false
              values:
               - False
-  - name: stg_unique_orders_fr
+  - name: stg_orders_fr
     columns:
       - name: test
         tests:
@@ -17,7 +17,7 @@ models:
              quote:  false
              values:
               - False
-  - name: stg_unique_orders_it
+  - name: stg_orders_it
     columns:
       - name: test
         tests:

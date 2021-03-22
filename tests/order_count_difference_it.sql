@@ -2,7 +2,8 @@ WITH stitch_orders AS(
 SELECT 
   SAFE_CAST(DATE(created_at) AS STRING) AS ordered_at,
   count(*) as order_count
-FROM {{ ref('stg_unique_orders_it')}}
+FROM {{ ref('stg_orders_it')}}
+WHERE  gift_card = false
 GROUP BY 1
 ),
 
@@ -27,4 +28,5 @@ FROM date_array
 LEFT JOIN shopify_csv_orders USING(ordered_at)
 LEFT JOIN stitch_orders USING(ordered_at)
 WHERE (IFNULL(shopify_csv_orders.orders,0) - IFNULL(stitch_orders.order_count,0)) != 0
+AND shopify_csv_orders.orders > 0
 ORDER BY ordered_at DESC

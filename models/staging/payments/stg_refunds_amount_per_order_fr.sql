@@ -2,7 +2,7 @@ SELECT
   * EXCEPT(rn)
 FROM (
   SELECT
-    order_id,
+    order_id As transaction_id,
     amount,
     created_at,
     ROW_NUMBER() OVER (PARTITION BY id ORDER BY _sdc_batched_at DESC) AS rn

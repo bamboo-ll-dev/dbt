@@ -1,6 +1,6 @@
 
 SELECT 
-    id AS id2, 
+    id AS transaction_id, 
     payment_gateway_names
 FROM (
      SELECT row_number() OVER (PARTITION BY id ORDER BY updated_at DESC) AS rn, updated_at, id, payment_gateway_names 
