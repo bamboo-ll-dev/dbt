@@ -1,7 +1,7 @@
 WITH shipments AS (
   SELECT
     *,
-    ROW_NUMBER() OVER (PARTITION BY created_at, product_sku, reference ORDER BY shipment_created_at DESC) AS row_number
+    ROW_NUMBER() OVER (PARTITION BY created_at, product_sku, reference, status ORDER BY shipment_created_at DESC) AS row_number
   FROM
    {{ source('zenf', 'orders_it')}}
     )
@@ -10,3 +10,4 @@ SELECT
 FROM
   shipments
 WHERE row_number = 1
+AND  status = "SHIPPED"

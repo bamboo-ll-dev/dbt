@@ -57,6 +57,8 @@ models:
             schema: 'influencer'
         items:
             schema: 'items'
+        nl_marketing:
+            schema: 'nl_marketing'
         marketing:
           schema: 'marketing'
         orders:
@@ -88,6 +90,8 @@ models:
       marts:
         core:
           schema: 'core'
+          database: 'leslunes-rep'
+
 
 
 
