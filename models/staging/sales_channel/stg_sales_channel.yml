@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: sales_channels
+    description: coupon codes created in influencer-tool
+    database: leslunes-raw
+    tables:
+      - name: stg_sales_channel_de
+        columns:
+            - name: transaction_id
+              tests:
+                    - unique
+                    - not_null
