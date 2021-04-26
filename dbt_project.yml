@@ -91,6 +91,10 @@ models:
         core:
           schema: 'core'
           database: 'leslunes-rep'
+        marketing:
+          inf_marketing:
+            schema: 'inf_marketing'
+            database: 'leslunes-rep'
 
 
 
