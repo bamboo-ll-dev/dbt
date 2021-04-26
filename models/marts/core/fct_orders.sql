@@ -20,4 +20,4 @@ SELECT
   ,created_at	
   ,updated_at
 FROM
-  {{ ref('orders_combined') }}
+  {{ ref('stg_orders_combined') }}
