@@ -1,13 +1,15 @@
-WITH bounces AS(
+WITH receiving AS(
   SELECT  
   id, 
-  event_name,
   datetime,
-  event_properties.bounce_type,
+  
+  event_name,
   event_properties.email_domain,
   event_properties.subject,
   event_properties.campaign_name,
+
   object,
+  
   person._country,
   person._source,
   person._region,
@@ -15,9 +17,10 @@ WITH bounces AS(
   uuid,
   timestamp,
   ROW_NUMBER() OVER(PARTITION BY id ORDER BY _sdc_received_at DESC) AS row_number
-  FROM `leslunes-raw.klaviyo_de.bounce` 
+  FROM `leslunes-raw.klaviyo_fr.receive` 
+  
 )
 
 SELECT * EXCEPT(row_number)
-FROM BOUNCES
+FROM receiving
 WHERE row_number = 1

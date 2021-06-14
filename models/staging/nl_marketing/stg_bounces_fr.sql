@@ -15,7 +15,7 @@ WITH bounces AS(
   uuid,
   timestamp,
   ROW_NUMBER() OVER(PARTITION BY id ORDER BY _sdc_received_at DESC) AS row_number
-  FROM `leslunes-raw.klaviyo_de.bounce` 
+  FROM `leslunes-raw.klaviyo_fr.bounce` 
 )
 
 SELECT * EXCEPT(row_number)
