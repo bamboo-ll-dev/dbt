@@ -4,7 +4,7 @@ o.id AS transaction_id,
 user_id AS user_id,
 customer.id AS customer_id,
 o.checkout_id AS checkout_id,
-created_at,
+created_at AS order_created_at,
 order_number,
 name AS shop_order_reference,
 number,
@@ -25,11 +25,14 @@ test,
 customer_locale,	
 processing_method,
 tags,
-f.value.created_at AS fulfilled_at_shopify,
-cancelled_at,
-updated_at,
-processed_at,
-closed_at,
+financial_status,
+fulfillment_status,
+gateway,
+f.value.created_at AS shopify_fulfilled_at,
+  cancelled_at AS order_cancelled_at,
+  updated_at AS order_updated_at,
+  processed_at AS order_processed_at,
+  closed_at AS order_closed_at,
 token,
 checkout_token
 FROM {{source('shopify_it', 'orders')}} o
@@ -37,7 +40,7 @@ LEFT JOIN UNNEST(fulfillments) f
 LEFT JOIN UNNEST(refunds) r
 LEFT JOIN UNNEST(discount_applications) dc
 LEFT JOIN UNNEST(tax_lines) tl
-LEFT JOIN UNNEST(line_items) li
+--LEFT JOIN UNNEST(line_items) li
 LEFT JOIN(
 SELECT 
   id, CASE WHEN li.value.gift_card = false THEN false END as gift_card
