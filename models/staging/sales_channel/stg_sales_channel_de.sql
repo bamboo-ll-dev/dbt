@@ -1,6 +1,6 @@
 SELECT 
   transaction_id,
-  created_at,
+  order_created_at,
   o.code,
   value,
   fixedAmount,
