@@ -14,7 +14,6 @@ SELECT row_number() OVER (PARTITION BY li.value.id, li.value.sku ORDER BY update
   
  FROM  `leslunes-raw.shopify_de.orders` o,  
  UNNEST(line_items) AS li,
-
  UNNEST(li.value.discount_allocations) AS dall
 ),
 
@@ -77,7 +76,7 @@ SELECT
   note,
   number,
   order_number,
-  name AS shopify_order_identifier,
+  name AS shop_order_reference,
   li.value.id AS line_item_id,
   li.value.product_id AS shopify_product_id,
   li.value.variant_id AS shopify_variant_id
