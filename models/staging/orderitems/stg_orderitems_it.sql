@@ -12,7 +12,7 @@ SELECT row_number() OVER (PARTITION BY li.value.id, li.value.sku ORDER BY update
   SAFE_CAST(dall.value.amount_set.shop_money.amount AS NUMERIC) AS item_discount,
   discount_applications
   
- FROM  `leslunes-raw.shopify_it.orders` o,  
+ FROM  {{source('shopify_it', 'orders')}} o,  
  UNNEST(line_items) AS li,
  UNNEST(li.value.discount_allocations) AS dall
 ),
@@ -31,7 +31,7 @@ SELECT distinct
   dapp.value.type,	
   dapp.value.value,
   li.value.id AS line_item_id
-FROM  `leslunes-raw.shopify_de.orders` o  
+FROM  {{source('shopify_it', 'orders')}} o  
 CROSS JOIN UNNEST(line_items) AS li 
 CROSS JOIN UNNEST(o.discount_applications) as dapp, UNNEST(li.value.properties) livp
 WHERE dapp.value.type = "script" AND livp.value.name	= "ll_fg" AND livp.value.value	= "true"
