@@ -1,11 +1,11 @@
 with orderitems_de AS (
-    SELECT * FROM {{ ref('stg_order_items_de')}}
+    SELECT * FROM {{ ref('stg_orderitems_de')}}
 ),
 orderitems_fr AS (
-     SELECT * FROM {{ ref('stg_order_items_fr')}}
+     SELECT * FROM {{ ref('stg_orderitems_fr')}}
 ),
 orderitems_it AS (
-     SELECT * FROM {{ ref('stg_order_items_it')}}
+     SELECT * FROM {{ ref('stg_orderitems_it')}}
 ),
 
 final AS (
