@@ -77,6 +77,8 @@ models:
           schema: 'shipments'
         surveys:
           schema: 'surveys'
+        transactions:
+          schema: 'transactions'
         xentral:
           schema: 'xentral'
         zendesk:
