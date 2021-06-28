@@ -14,8 +14,6 @@ final AS (
     SELECT * FROM orderitems_fr
     UNION ALL
     SELECT * FROM orderitems_it
-    UNION ALL
-
 )
 
 SELECT * 
