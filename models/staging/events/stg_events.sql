@@ -1,11 +1,11 @@
 with orderitems_de AS (
-    SELECT * FROM {{ ref('stg_order_items_de')}}
+    SELECT * FROM {{ ref('stg_orders_de')}}
 ),
 orderitems_fr AS (
-     SELECT * FROM {{ ref('stg_order_items_fr')}}
+     SELECT * FROM {{ ref('stg_orders_fr')}}
 ),
 orderitems_it AS (
-     SELECT * FROM {{ ref('stg_order_items_it')}}
+     SELECT * FROM {{ ref('stg_orders_it')}}
 ),
 
 final AS (
@@ -14,8 +14,6 @@ final AS (
     SELECT * FROM orderitems_fr
     UNION ALL
     SELECT * FROM orderitems_it
-    UNION ALL
-
 )
 
 SELECT * 
