@@ -47,6 +47,8 @@ models:
           schema: 'costs'
         customers:
           schema: 'customers'
+        coupons:
+          schema: 'coupons'
         events:
           schema: 'events'
         gsheets:
