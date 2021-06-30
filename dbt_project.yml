@@ -53,6 +53,8 @@ models:
           schema: 'gsheets'
         influencer:
           schema: 'influencer'
+        items:
+          schema: 'items'
         nl_marketing:
           schema: 'nl_marketing'
         orders:
