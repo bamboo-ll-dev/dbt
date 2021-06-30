@@ -77,6 +77,8 @@ models:
           schema: 'sales'
         sales_channel:
           schema: 'sales_channel'
+        scm:
+          schema: 'scm'
         shipments:
           schema: 'shipments'
         surveys:
