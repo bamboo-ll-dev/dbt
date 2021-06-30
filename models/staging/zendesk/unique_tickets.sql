@@ -10,6 +10,6 @@ WITH cte AS(
     `leslunes-raw.zendesk.tickets` t,
     UNNEST(t.custom_fields) AS cf
     )
- SELECT "" --* 
+ SELECT * 
  
  FROM CTE WHERE row_number = 1

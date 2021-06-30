@@ -5,7 +5,7 @@ WHERE type = 'Comment'
 
 )
 
-SELECT "" --* 
+SELECT * 
 FROM comments
 
 where row_number = 1

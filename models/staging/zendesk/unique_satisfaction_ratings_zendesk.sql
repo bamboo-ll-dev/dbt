@@ -5,7 +5,7 @@ SELECT *
 FROM `leslunes-raw.zendesk.satisfaction_ratings` 
 )
 
-SELECT "" --* 
+SELECT * 
 
 FROM satisfaction_ratings WHERE row_number = 1
 AND score in ('good', 'bad')

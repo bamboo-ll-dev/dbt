@@ -5,6 +5,6 @@ SELECT
 FROM `leslunes-raw.zendesk.ticket_metrics`
 )
 
-SELECT "" --*
+SELECT *
 FROM ticket_metrics
 WHERE row_number = 1
