@@ -1,93 +1,187 @@
-WITH line_items AS(
-SELECT row_number() OVER (PARTITION BY li.value.id, li.value.sku ORDER BY updated_at DESC) AS row_number, 
-  li, 
+WITH line_items_sets AS(
+  SELECT row_number() OVER (PARTITION BY li.value.id, li.value.sku ORDER BY updated_at DESC) AS row_number, 
   id,
+  li,
   o.created_at,
   o.updated_at,
   o.note,
   o.number,
   o.order_number,
-  o.name,
-  
-  SAFE_CAST(dall.value.amount_set.shop_money.amount AS NUMERIC) AS item_discount,
-  discount_applications
-  
- FROM  {{source('shopify_de', 'orders')}} o,  
- UNNEST(line_items) AS li,
- UNNEST(li.value.discount_allocations) AS dall
+  o.name, 
+  li.value.id AS line_item_id,
+  li.value.price_set.shop_money.amount,
+  "set_item" AS item_type,
+  email, tags
+FROM  {{source('shopify_de', 'orders')}} o,  
+UNNEST(line_items) AS li
+WHERE test = False
 ),
 
-special_codes AS(
+line_items AS(
+  SELECT 
+    row_number() OVER (PARTITION BY li.value.id, li.value.sku ORDER BY updated_at DESC) AS row_number, 
+    o.id, 
+    li.value.sku, 
+    note, 
+    name, 
+    created_at, 
+    order_number,  
+    li.value.title AS order_item,
+    li.value.title AS item_title, 
+    li.value.id AS line_item_id,
+    li.value.price_set.shop_money.amount,
+    "single_item" AS item_type,
+    email, tags
+FROM {{source('shopify_de', 'orders')}} o,  
+UNNEST(line_items) AS li
+WHERE test = False
+), tax AS (
+ 
+ SELECT 
+  distinct 
+  id AS shopify_transaction_id ,tx.value.rate AS tax_rate, 
+  FROM {{source('shopify_de', 'orders')}},
+  UNNEST(line_items) AS li,
+  UNNEST(li.value.tax_lines) AS tx
+ 
+), shipping AS(
+SELECT 
+  distinct
+  o.id AS shopify_transaction_id,
+  sl.value.code AS shipping_method,
+  shipping_address.country As shipping_country
+FROM  
+  {{source('shopify_de', 'orders')}} o,
+  UNNEST(shipping_lines) AS sl
+),freegift_codes AS(
 /*
 * freegifts are implemented by script in shopify
 */
 SELECT distinct
-  id,
-  dapp.value.value_type,	
-  dapp.value.target_type,	
-  dapp.value.description,	
-  dapp.value.target_selection,	
-  dapp.value.title,	
-  dapp.value.type,	
-  dapp.value.value,
+  dapp.value.value_type AS fg_value_type,	
+  dapp.value.target_type AS fg_target_type ,	
+  dapp.value.description AS fg_desc,
+  dapp.value.target_selection AS fg_target_selection,
+  dapp.value.title AS fg_title,
+  dapp.value.type AS fg_type,
+  dapp.value.value AS fg_value,
   li.value.id AS line_item_id
-FROM  {{source('shopify_de', 'orders')}} o  
-CROSS JOIN UNNEST(line_items) AS li 
-CROSS JOIN UNNEST(o.discount_applications) as dapp, UNNEST(li.value.properties) livp
+FROM {{source('shopify_de', 'orders')}} o,
+ UNNEST(line_items) AS li, 
+ UNNEST(o.discount_applications) as dapp,
+ UNNEST(li.value.properties) livp
 WHERE dapp.value.type = "script" AND livp.value.name	= "ll_fg" AND livp.value.value	= "true"
+)
+, coupon_codes AS(
+
+SELECT distinct
+  o.id AS shopify_transaction_id,
+  dapp.value.value_type AS code_value_type,	
+  dapp.value.target_type AS code_target_type,	
+  dapp.value.description AS code_desc,	
+  dapp.value.target_selection AS code_target_selection,	
+  dapp.value.title AS code_title,	
+  dapp.value.type AS code_type,	
+  dapp.value.value AS code_value,
+  dapp.value.code AS code,
+  
+FROM  
+  leslunes-raw.shopify_de.orders o,
+  UNNEST(o.discount_applications) AS dapp 
+  WHERE dapp.value.type != "script"
+)
+
+, final as(
+  SELECT 
+   id AS shopify_transaction_id,
+   email,
+   DATE(created_at) AS created_at_utc,
+   
+   note AS order_note, 
+   name AS shop_order_ref,
+   order_number, 
+   
+   li.value.title AS order_item, 
+   p.value.name AS item_title,	
+   p.value.value AS item_desc, 
+   
+   CASE WHEN REGEXP_CONTAINS(p.value.name, r"Set") THEN amount ELSE "0" END AS amount,
+   
+   line_item_id AS LID,
+   item_type,
+   tags
+
+FROM line_items_sets i, unnest(li.value.properties) p
+
+WHERE 
+  row_number = 1
+  AND p.value.name not in("ll_fg", "ll_hash","ll_min_total")
+  
+UNION ALL
+
+SELECT 
+ id AS shopify_transaction_id, 
+ email ,
+ DATE(created_at) AS created_at_utc,
+ 
+ note AS order_note, 
+ name AS shop_order_ref,
+ order_number, 
+ 
+ CASE WHEN sku = "" THEN order_item ELSE sku END AS order_item, 
+ order_item AS item_title,
+ sku AS item_desc,
+ 
+ amount,
+ 
+ line_item_id as LID,
+ item_type, tags
+ 
+FROM line_items li 
+WHERE 
+  row_number = 1
+  AND order_item not in("ll_fg", "ll_hash","ll_min_total")
 )
 
 SELECT 
-  i.id AS shopify_order_id,
-  DATE(created_at) AS created_at_utc,
-  
-  li.value.sku AS shopify_sku,
-  li.value.title AS shopify_product_title,
-  li.value.variant_title AS shopify_variant_title ,	
-  li.value.name AS shopify_product_name,
-  li.value.price AS item_price_original,
-  li.value.quantity AS ordered_quantity,
-
-  item_discount,
-  tx.value.rate AS tax_rate,
-  tx.value.price AS tax_amount,
-  tx.value.title AS tax_type,
-
-  dapp.value.value_type AS coupon_value_type,	
-  dapp.value.target_type AS coupon_target_type,	 
-  dapp.value.type AS coupon_type,
-  dapp.value.value AS coupon_value,	
-  dapp.value.code AS coupon_code,
-  
-  /* freegifts */
-  sc.value_type AS freegift_type,
-  sc.target_type AS freegift_target_type,
-  sc.description AS freegift_description,
-  sc.target_selection AS freegift_selection,
-  sc.type AS freegift_mode,
-  sc.value AS freegift_value,
-
-  li.value.total_discount_set.shop_money.currency_code,
-  li.value.taxable,
-  li.value.gift_card,
-  li.value.requires_shipping,
-  li.value.vendor,
-
-  note,
-  number,
-  order_number,
-  name AS shop_order_reference,
-  li.value.id AS line_item_id,
-  li.value.product_id AS shopify_product_id,
-  li.value.variant_id AS shopify_variant_id
-
-FROM line_items i,
-UNNEST(li.value.tax_lines) AS tx,
-UNNEST(discount_applications) AS dapp
-# add freegift in separate processing step
-LEFT JOIN special_codes sc ON  sc.line_item_id = li.value.id
-
-WHERE i.row_number = 1 
-# erase freegift from initial dataset
-AND dapp.value.type != "script"
-ORDER BY i.id
+  f.shopify_transaction_id,	
+  MD5(email) AS email_hash,
+  created_at_utc,	
+  order_note,	
+  shop_order_ref,
+  order_number,	
+  item_title,
+    CASE 
+    WHEN REGEXP_CONTAINS(item_desc, r"\(SKU: (.*?)\)") 
+    THEN REGEXP_EXTRACT(item_desc, r"\(SKU: (.*?)\)") 
+    ELSE item_desc END 
+  AS sku,
+  order_item,
+  s.shipping_method,
+  s.shipping_country,
+  SAFE_CAST(amount AS FLOAT64) AS order_item_price,
+  SAFE_CAST(tax_rate AS FLOAT64) AS tax_rate,
+  IFNULL(SAFE_CAST(fg_value AS FLOAT64), 0) AS fg_value,
+  code_value,
+  code,
+  code_value_type,
+  fg_value_type,
+  fg_target_type,	
+  fg_desc,	
+  fg_target_selection,	
+  fg_title,	
+  fg_type,	
+  code_target_type,
+  code_desc,
+  code_target_selection,
+  code_title,
+  code_type,
+  item_desc,
+  item_type,
+  tags
+FROM final f
+LEFT JOIN freegift_codes sc ON  sc.line_item_id = LID
+LEFT JOIN coupon_codes cc ON  cc.shopify_transaction_id  = f.shopify_transaction_id
+LEFT JOIN tax t ON f.shopify_transaction_id = t.shopify_transaction_id
+LEFT JOIN shipping s ON s.shopify_transaction_id = f.shopify_transaction_id
+ORDER BY shopify_transaction_id
