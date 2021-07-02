@@ -57,6 +57,8 @@ models:
           schema: 'influencer'
         items:
           schema: 'items'
+        marketing:
+          schema: 'marketing'
         nl_marketing:
           schema: 'nl_marketing'
         orders:
