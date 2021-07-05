@@ -95,7 +95,7 @@ FROM
   SELECT 
    id AS shopify_transaction_id,
    email,
-   DATE(created_at) AS created_at_utc,
+   created_at,
    
    note AS order_note, 
    name AS shop_order_ref,
@@ -122,7 +122,7 @@ UNION ALL
 SELECT 
  id AS shopify_transaction_id, 
  email ,
- DATE(created_at) AS created_at_utc,
+ created_at,
  
  note AS order_note, 
  name AS shop_order_ref,
@@ -146,7 +146,7 @@ WHERE
 SELECT 
   f.shopify_transaction_id,	
   MD5(email) AS email_hash,
-  created_at_utc,	
+  created_at,	
   order_note,	
   shop_order_ref,
   order_number,	
