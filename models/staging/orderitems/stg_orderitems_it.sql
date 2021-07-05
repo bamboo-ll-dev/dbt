@@ -141,12 +141,18 @@ FROM line_items li
 WHERE 
   row_number = 1
   AND order_item not in("ll_fg", "ll_hash","ll_min_total")
+) , first_purchase_date AS(
+
+SELECT DISTINCT
+  TO_BASE64(MD5(UPPER(email))) AS email_hash, created_at,
+  MIN(created_At) OVER (PARTITION BY TO_BASE64(MD5(UPPER(email)))) AS first_purchase_date, 
+FROM final
 )
 
 SELECT 
   f.shopify_transaction_id,	
-  TO_BASE64(MD5(UPPER(email)) AS email_hash,
-  created_at,	
+  TO_BASE64(MD5(UPPER(email))) AS email_hash,
+  f.created_at,	
   order_note,	
   shop_order_ref,
   order_number,	
@@ -178,11 +184,14 @@ SELECT
   code_type,
   item_desc,
   item_type,
-  tags
+  tags,
+  CASE WHEN f.created_at = c.first_purchase_date THEN 1 ELSE 0 END AS new_customer,
+  CASE WHEN f.created_at = c.first_purchase_date THEN 0 ELSE 1 END AS returning_customer
 FROM final f
 LEFT JOIN freegift_codes sc ON  sc.line_item_id = LID
 LEFT JOIN coupon_codes cc ON  cc.shopify_transaction_id  = f.shopify_transaction_id
 LEFT JOIN tax t ON f.shopify_transaction_id = t.shopify_transaction_id
 LEFT JOIN shipping s ON s.shopify_transaction_id = f.shopify_transaction_id
+LEFT JOIN  first_purchase_date c ON c.email_hash = TO_BASE64(MD5(UPPER(f.email))) 
 ORDER BY shopify_transaction_id   
  
