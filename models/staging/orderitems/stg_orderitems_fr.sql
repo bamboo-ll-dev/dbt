@@ -145,7 +145,7 @@ WHERE
 
 SELECT 
   f.shopify_transaction_id,	
-  MD5(UPPER(email)) AS email_hash,
+  TO_BASE64(MD5(UPPER(email)) AS email_hash,
   created_at,	
   order_note,	
   shop_order_ref,
