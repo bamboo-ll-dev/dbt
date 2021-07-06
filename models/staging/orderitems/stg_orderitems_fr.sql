@@ -30,8 +30,16 @@ line_items AS(
     li.value.title AS item_title, 
     li.value.id AS line_item_id,
     li.value.price_set.shop_money.amount,
-    "single_item" AS item_type,
-    email, tags
+    CASE 
+      WHEN 
+        LOWER(li.value.title) LIKE '%set%' 
+        OR LOWER(li.value.title) LIKE '%duo%' 
+        OR LOWER(li.value.title) LIKE '%trio%' 
+        OR LOWER(li.value.title) LIKE '%bundle%' 
+       THEN 'set'
+       ELSE "single_item" END AS item_type,
+    email,
+    tags
 FROM {{source('shopify_fr', 'orders')}} o,
 UNNEST(line_items) AS li
 WHERE test = False
@@ -149,7 +157,7 @@ SELECT DISTINCT
 FROM final
 )
 
-SELECT 
+SELECT DISTINCT
   f.shopify_transaction_id,	
   TO_BASE64(MD5(UPPER(email))) AS email_hash,
   f.created_at,	
