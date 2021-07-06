@@ -11,7 +11,9 @@ WITH line_items_sets AS(
   li.value.id AS line_item_id,
   li.value.price_set.shop_money.amount,
   "set_item" AS item_type,
-  email, tags
+  email, 
+  tags,
+  source_name
 FROM  {{source('shopify_it', 'orders')}} o,  
 UNNEST(line_items) AS li
 WHERE test = False
@@ -39,7 +41,8 @@ line_items AS(
        THEN 'set'
        ELSE "single_item" END AS item_type,
     email,
-    tags
+    tags,
+    source_name
 FROM {{source('shopify_it', 'orders')}} o,
 UNNEST(line_items) AS li
 WHERE test = False
@@ -117,8 +120,8 @@ FROM
    
    line_item_id AS LID,
    item_type,
-   tags
-
+   tags,
+   source_name
 FROM line_items_sets i, unnest(li.value.properties) p
 
 WHERE 
@@ -143,8 +146,9 @@ SELECT
  amount,
  
  line_item_id as LID,
- item_type, tags
- 
+ item_type, 
+ tags,
+ source_name
 FROM line_items li 
 WHERE 
   row_number = 1
@@ -194,7 +198,8 @@ SELECT DISTINCT
   item_type,
   tags,
   CASE WHEN f.created_at = c.first_purchase_date THEN 1 ELSE 0 END AS new_customer,
-  CASE WHEN f.created_at = c.first_purchase_date THEN 0 ELSE 1 END AS returning_customer
+  CASE WHEN f.created_at = c.first_purchase_date THEN 0 ELSE 1 END AS returning_customer,
+  CASE WHEN source_name = "580111" THEN "web" ELSE source_name END AS source_name
 FROM final f
 LEFT JOIN freegift_codes sc ON  sc.line_item_id = LID
 LEFT JOIN coupon_codes cc ON  cc.shopify_transaction_id  = f.shopify_transaction_id
