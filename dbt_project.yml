@@ -47,12 +47,20 @@ models:
           schema: 'costs'
         customers:
           schema: 'customers'
+        coupons:
+          schema: 'coupons'
         events:
           schema: 'events'
         gsheets:
           schema: 'gsheets'
+        google_analytics:
+          schema: 'google_analytics'
         influencer:
           schema: 'influencer'
+        items:
+          schema: 'items'
+        marketing:
+          schema: 'marketing'
         nl_marketing:
           schema: 'nl_marketing'
         orders:
@@ -73,6 +81,8 @@ models:
           schema: 'sales'
         sales_channel:
           schema: 'sales_channel'
+        scm:
+          schema: 'scm'
         shipments:
           schema: 'shipments'
         surveys:
