@@ -1,1 +1,0 @@
-SELECT * FROM `leslunes-raw.gsheets.fob_countries_transport_mode`

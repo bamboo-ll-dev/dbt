@@ -1,1 +1,0 @@
-SELECT * FROM `leslunes-raw.gsheets.fob_shipments_tracking_cost`
