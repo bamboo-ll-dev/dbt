@@ -77,22 +77,17 @@ FROM {{source('shopify_it', 'orders')}} o,
  UNNEST(o.discount_applications) as dapp,
  UNNEST(li.value.properties) livp
 WHERE dapp.value.type = "script" AND livp.value.name	= "ll_fg" AND livp.value.value	= "true"
-),coupon_codes AS(
-
-SELECT distinct
-  o.id AS shopify_transaction_id,
-  dapp.value.value_type AS code_value_type,	
-  dapp.value.target_type AS code_target_type,	
-  dapp.value.description AS code_desc,	
-  dapp.value.target_selection AS code_target_selection,	
-  dapp.value.title AS code_title,	
-  dapp.value.type AS code_type,	
-  dapp.value.value AS code_value,
-  dapp.value.code AS code,
-  
-FROM  
-  {{source('shopify_it', 'orders')}} o,
-  UNNEST(o.discount_applications) AS dapp 
+),
+coupon_codes AS(
+  SELECT distinct
+    o.id AS shopify_transaction_id,
+    dapp.value.value_type AS code_value_type,
+    dapp.value.type AS code_type,	
+    dapp.value.value AS code_value,
+    dapp.value.code AS code
+  FROM  
+    {{source('shopify_it', 'orders')}} o,
+    UNNEST(o.discount_applications) AS dapp 
   WHERE dapp.value.type != "script"
 ),
 
@@ -158,10 +153,7 @@ FROM final
 SELECT DISTINCT
   f.shopify_transaction_id,	
   TO_BASE64(MD5(UPPER(email))) AS email_hash,
-  f.created_at,	
-  order_note,	
-  shop_order_ref,
-  order_number,	
+  f.created_at AS bought_at_utc,	
   item_title,
     CASE 
     WHEN REGEXP_CONTAINS(item_desc, r"\(SKU: (.*?)\)") 
@@ -178,17 +170,16 @@ SELECT DISTINCT
   code,
   code_value_type,	
   fg_title,		
-  code_target_type,
-  code_desc,
-  code_target_selection,
-  code_title,
   code_type,
   item_desc,
   item_type,
   tags,
+  order_note,	
   CASE WHEN f.created_at = c.first_purchase_date THEN 1 ELSE 0 END AS new_customer,
   CASE WHEN f.created_at = c.first_purchase_date THEN 0 ELSE 1 END AS returning_customer,
-  CASE WHEN source_name = "580111" THEN "web" ELSE source_name END AS source_name
+  CASE WHEN source_name = "580111" THEN "web" ELSE source_name END AS source_name,
+  shop_order_ref,
+  order_number
 FROM final f
 LEFT JOIN freegift_codes sc ON  sc.line_item_id = LID
 LEFT JOIN coupon_codes cc ON  cc.shopify_transaction_id  = f.shopify_transaction_id
