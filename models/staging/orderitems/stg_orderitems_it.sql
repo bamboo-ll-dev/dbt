@@ -69,21 +69,15 @@ FROM
 * freegifts are implemented by script in shopify
 */
 SELECT distinct
-  dapp.value.value_type AS fg_value_type,	
-  dapp.value.target_type AS fg_target_type ,	
-  dapp.value.description AS fg_desc,
-  dapp.value.target_selection AS fg_target_selection,
+  li.value.id AS line_item_id,
   dapp.value.title AS fg_title,
-  dapp.value.type AS fg_type,
-  dapp.value.value AS fg_value,
-  li.value.id AS line_item_id
+  dapp.value.value AS fg_value
 FROM {{source('shopify_it', 'orders')}} o,
  UNNEST(line_items) AS li, 
  UNNEST(o.discount_applications) as dapp,
  UNNEST(li.value.properties) livp
 WHERE dapp.value.type = "script" AND livp.value.name	= "ll_fg" AND livp.value.value	= "true"
-)
-, coupon_codes AS(
+),coupon_codes AS(
 
 SELECT distinct
   o.id AS shopify_transaction_id,
@@ -100,9 +94,9 @@ FROM
   {{source('shopify_it', 'orders')}} o,
   UNNEST(o.discount_applications) AS dapp 
   WHERE dapp.value.type != "script"
-)
+),
 
-, final as(
+final AS(
   SELECT 
    id AS shopify_transaction_id,
    email,
@@ -182,13 +176,8 @@ SELECT DISTINCT
   IFNULL(SAFE_CAST(fg_value AS FLOAT64), 0) AS fg_value,
   code_value,
   code,
-  code_value_type,
-  fg_value_type,
-  fg_target_type,	
-  fg_desc,	
-  fg_target_selection,	
-  fg_title,	
-  fg_type,	
+  code_value_type,	
+  fg_title,		
   code_target_type,
   code_desc,
   code_target_selection,

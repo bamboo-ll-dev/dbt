@@ -69,40 +69,32 @@ FROM
 * freegifts are implemented by script in shopify
 */
 SELECT distinct
-  dapp.value.value_type AS fg_value_type,	
-  dapp.value.target_type AS fg_target_type ,	
-  dapp.value.description AS fg_desc,
-  dapp.value.target_selection AS fg_target_selection,
+  li.value.id AS line_item_id,
   dapp.value.title AS fg_title,
-  dapp.value.type AS fg_type,
-  dapp.value.value AS fg_value,
-  li.value.id AS line_item_id
+  dapp.value.value AS fg_value
 FROM {{source('shopify_de', 'orders')}} o,
  UNNEST(line_items) AS li, 
  UNNEST(o.discount_applications) as dapp,
  UNNEST(li.value.properties) livp
 WHERE dapp.value.type = "script" AND livp.value.name	= "ll_fg" AND livp.value.value	= "true"
-)
-, coupon_codes AS(
-
-SELECT distinct
-  o.id AS shopify_transaction_id,
-  dapp.value.value_type AS code_value_type,	
-  dapp.value.target_type AS code_target_type,	
-  dapp.value.description AS code_desc,	
-  dapp.value.target_selection AS code_target_selection,	
-  dapp.value.title AS code_title,	
-  dapp.value.type AS code_type,	
-  dapp.value.value AS code_value,
-  dapp.value.code AS code,
-  
-FROM  
-  leslunes-raw.shopify_de.orders o,
-  UNNEST(o.discount_applications) AS dapp 
+),
+coupon_codes AS(
+  SELECT distinct
+    o.id AS shopify_transaction_id,
+    dapp.value.value_type AS code_value_type,	
+    dapp.value.target_type AS code_target_type,	
+    dapp.value.description AS code_desc,	
+    dapp.value.target_selection AS code_target_selection,	
+    dapp.value.title AS code_title,	
+    dapp.value.type AS code_type,	
+    dapp.value.value AS code_value,
+    dapp.value.code AS code,
+  FROM  
+    leslunes-raw.shopify_de.orders o,
+    UNNEST(o.discount_applications) AS dapp 
   WHERE dapp.value.type != "script"
-)
-
-, final as(
+),
+final AS(
   SELECT 
    id AS shopify_transaction_id,
    email,
@@ -183,12 +175,7 @@ SELECT DISTINCT
   code_value,
   code,
   code_value_type,
-  fg_value_type,
-  fg_target_type,	
-  fg_desc,	
-  fg_target_selection,	
   fg_title,	
-  fg_type,	
   code_target_type,
   code_desc,
   code_target_selection,
