@@ -3,6 +3,7 @@
 */
 SELECT distinct
   li.value.id AS line_item_id,
+  o.id AS transaction_id,
   dapp.value.title AS fg_title,
   dapp.value.value AS fg_value
 FROM {{source('shopify_de', 'orders')}} o,
