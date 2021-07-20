@@ -51,7 +51,7 @@ SELECT
   total_shipping_price_set__presentment_money__amount AS shippment_amount,
   'DE' AS source
 FROM
-  `leslunes-prep.orders.unique_orders_with_items_de`
+  `leslunes-prep.dbt_orders.unique_orders_with_items_de`
 UNION ALL
 SELECT
   id,
@@ -106,7 +106,7 @@ SELECT
   total_shipping_price_set__presentment_money__amount AS shippment_amount,
   'FR' AS source
 FROM
-  `leslunes-prep.orders.unique_orders_with_items_fr`
+  `leslunes-prep.dbt_orders.unique_orders_with_items_fr`
 UNION ALL
 SELECT
   id,
@@ -161,4 +161,4 @@ SELECT
   total_shipping_price_set__presentment_money__amount AS shippment_amount,
   'IT' AS source
 FROM
-  `leslunes-prep.orders.unique_orders_with_items_it`
+  `leslunes-prep.dbt_orders.unique_orders_with_items_it`

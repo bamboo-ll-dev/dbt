@@ -5,7 +5,7 @@ SELECT
 ROUND(SAFE_DIVIDE(SAFE_CAST(total_discounts AS FLOAT64), SAFE_CAST(total_line_items_price AS FLOAT64))) AS discount_rate, 
 ROUND(SAFE_DIVIDE(SAFE_CAST(line_items__price AS FLOAT64), SAFE_CAST(total_line_items_price AS FLOAT64))) AS shipping_rate, 
 ROUND(SAFE_DIVIDE(SAFE_CAST(line_items__price AS FLOAT64), SAFE_CAST(total_line_items_price AS FLOAT64))) AS refund_rate
-FROM `leslunes-prep.orders.unique_orders_it` as orders #`les-lunes-data-269915.import_it.unique_orders` as orders
+FROM `leslunes-prep.dbt_orders.unique_orders_it` as orders 
 LEFT JOIN (SELECT 
 #Columns from unique_items view
 SAFE_CAST(line_items__id AS STRING) AS line_items__id,
@@ -57,7 +57,7 @@ SAFE_CAST(order__id AS STRING) AS order__id,
 #SAFE_CAST(line_items_properties__name AS STRING) AS line_items_properties__name,
 #SAFE_CAST(line_items_properties__value AS STRING) AS line_items_properties__value,
 SAFE_CAST(item_type AS STRING) AS item_type
-FROM `leslunes-prep.items.unique_items_it`) as items ON CAST(orders.id AS STRING) = items.order__id
+FROM `leslunes-prep.dbt_items.unique_items_it`) as items ON CAST(orders.id AS STRING) = items.order__id
 LEFT JOIN ( 
 #Columns from unique_refunds
 SELECT order_id, SUM(refund_amount) AS refund_amount, MIN(refunded_at) AS refunded_at FROM 
